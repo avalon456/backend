@@ -8,6 +8,7 @@
         "name": "teidesu"
     },
     "scripts": {
+        "start": "node dist/src/index.js",
         "run": "yarn run build:ts && node dist/src/index.js",
         "test": "yarn run build && yarn run test:dirty",
         "test:dirty": "mocha dist/tests/**/*.spec.js",
