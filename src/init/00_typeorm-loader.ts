@@ -8,6 +8,9 @@ import { clone, merge } from '@/helpers/object-utils'
 export const connectionOptions: ConnectionOptions = {
     type: databaseType as any,
     url: database,
+    ssl: {
+        requestCert: true
+    },
     entities: [
         join(__dirname, '../models/**/*.{ts,js}')
     ],
