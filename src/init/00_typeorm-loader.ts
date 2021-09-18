@@ -4,12 +4,14 @@ import { database, databaseType, isProduction } from '@/config'
 import { join } from 'path'
 import { TheNamingStrategy } from '@/helpers/typeorm-utils'
 import { clone, merge } from '@/helpers/object-utils'
+import { readFileSync } from 'fs'
 
 export const connectionOptions: ConnectionOptions = {
     type: databaseType as any,
     url: database,
     ssl: {
-        requestCert: true
+        ca: readFileSync("./src/config/certs/rds-ca-2015-root.pem")
+           .toString()
     },
     entities: [
         join(__dirname, '../models/**/*.{ts,js}')
