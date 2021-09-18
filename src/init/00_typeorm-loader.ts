@@ -10,7 +10,7 @@ export const connectionOptions: ConnectionOptions = {
     type: databaseType as any,
     url: database,
     ssl: {
-        ca: readFileSync("./src/config/certs/rds-ca-2015-root.pem")
+        ca: readFileSync("./src/certs/server.crt.pem")
            .toString()
     },
     entities: [
