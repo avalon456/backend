@@ -1,7 +1,7 @@
 import IORedis from 'ioredis'
 import { Notification } from '@/models/Notification'
 import redis from '@/data/redis'
-import { AnyKV } from '@/types/utils'
+import { AnyKV, StringKV } from '@/types/utils'
 import { merge } from '@/helpers/object-utils'
 import fetch from 'node-fetch'
 import { firebaseToken } from '@/config'
@@ -47,8 +47,14 @@ export class PushService {
     sub: IORedis.Redis
     private __registry: Record<string, PushEventListener[]> = {}
 
-    private constructor () {
-        this.sub = new IORedis()
+    private constructor() {
+        const env: StringKV = process.env as any;
+        const redisUri = env.REDIS_URL;
+        if (redisUri) {
+            this.sub = new IORedis(redisUri);
+        } else {
+            this.sub = new IORedis();
+        }
         this.sub.subscribe(PushService.REDIS_CHANNEL)
             .then(() => {
                 this.sub.on('message', (chan, msg) => {

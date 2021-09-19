@@ -12,7 +12,7 @@ import { generateOnConflictStatement } from '@/helpers/utils'
 import { chunks, createIndex, shallowMerge } from '@/helpers/object-utils'
 import { ChildProcess, fork } from 'child_process'
 import { join } from 'path'
-import { AnyKV, AtLeast } from '@/types/utils'
+import { AnyKV, AtLeast, StringKV } from '@/types/utils'
 import { PaginatedResponse, PaginatedSorted } from '@/types/api'
 import { ExternalServiceMappings, MediaType } from '@/types/media'
 import { KeyValue } from '@/models/KeyValue'
@@ -44,8 +44,14 @@ export class ParsersService {
     // separate process for Parsers (importers/mappers)
     parsersProcess: ChildProcess | null = null
 
-    private constructor () {
-        this.sub = new IORedis()
+    private constructor() {
+        const env: StringKV = process.env as any
+        const redisUri = env.REDIS_URL
+        if (redisUri) {
+            this.sub = new IORedis(redisUri)
+        } else {
+            this.sub = new IORedis()
+        }
         this.sub.subscribe(ParsersService.REDIS_CHANNEL)
             .then(() => {
                 this.sub.on('message', (chan, msg) => {
