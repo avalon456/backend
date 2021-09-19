@@ -17,7 +17,9 @@ export const connectionOptions: ConnectionOptions = {
     ],
     logging: isProduction ? ['migration', 'warn', 'error'] : true,
     namingStrategy: new TheNamingStrategy(),
-    ssl: true,
+    ssl: {
+        rejectUnauthorized: false
+    },
     extra: {
         ssl: true
     }
