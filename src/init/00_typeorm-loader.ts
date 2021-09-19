@@ -21,7 +21,8 @@ export const connectionOptions: ConnectionOptions = {
         rejectUnauthorized: false
     },
     extra: {
-        ssl: true
+        ssl: true,
+        rejectUnauthorized: false
     }
     // ssl: {
     //     ca: readFileSync('./dist/src/ca_cert.cer').toString()
