@@ -2,7 +2,9 @@ import { Worker } from 'bullmq'
 import { Translation } from '@/models/Translation'
 import { Notification } from '@/models/Notification'
 import { MediaType } from '@/types/media'
+import { getRedisConnection, getRedisInstance } from '@/helpers/redis-creator'
 
+const redis = getRedisConnection()
 const worker = new Worker('TranslationNotifier', async ({ name, data }) => {
     if (name === 'notify-new') {
         const { translation } = data
@@ -45,5 +47,5 @@ const worker = new Worker('TranslationNotifier', async ({ name, data }) => {
             }).send()
         }
     }
-})
+}, redis)
 worker.on('error', console.error)

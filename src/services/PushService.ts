@@ -8,6 +8,7 @@ import { firebaseToken } from '@/config'
 import { FirebaseToken } from '@/models/FirebaseToken'
 import { FirebaseNotifierQueue } from '@/data/queues'
 import { User } from '@/models/User'
+import { getRedisInstance } from '@/helpers/redis-creator'
 
 export type PushEventListener = (
     data: NotificationMeta,
@@ -48,13 +49,7 @@ export class PushService {
     private __registry: Record<string, PushEventListener[]> = {}
 
     private constructor() {
-        const env: StringKV = process.env as any;
-        const redisUri = env.REDIS_URL;
-        if (redisUri) {
-            this.sub = new IORedis(redisUri);
-        } else {
-            this.sub = new IORedis();
-        }
+        this.sub = getRedisInstance();
         this.sub.subscribe(PushService.REDIS_CHANNEL)
             .then(() => {
                 this.sub.on('message', (chan, msg) => {

@@ -1,15 +1,6 @@
-import { StringKV } from '@/types/utils'
-import IORedis from 'ioredis'
+import { getRedisInstance } from '@/helpers/redis-creator'
 
-const env: StringKV = process.env as any
-const redisUri = env.REDIS_URL
-let redis;
-if(redisUri) {
-    redis = new IORedis(redisUri)
-} else {
-    redis = new IORedis()
-}
-
+const redis = getRedisInstance();
 redis.on('error', console.error)
 
 export default redis

@@ -11,9 +11,11 @@ import { $t } from '@/i18n'
 import ShikimoriApi from '@/external/shikimori/api'
 import { LOG } from '@/helpers/logging'
 import { User } from '@/models/User'
+import { getRedisConnection, getRedisInstance } from '@/helpers/redis-creator'
 
 const shikimoriApi = ShikimoriApi.instance
 
+const redis = getRedisConnection()
 const worker = new Worker('FirebaseNotifier', async ({ name, data }) => {
     if (name === 'del-tag') {
         await PushService.instance.deleteNotificationsWithTag(data.tag)
@@ -143,6 +145,6 @@ const worker = new Worker('FirebaseNotifier', async ({ name, data }) => {
             count: sentCount
         })
     }
-})
+}, redis)
 
 worker.on('error', console.error)

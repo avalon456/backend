@@ -19,6 +19,7 @@ import { KeyValue } from '@/models/KeyValue'
 import { ApiError } from '@/types/errors'
 import { Brackets, Like } from 'typeorm'
 import { ParsersState } from '@/workers/parsers/state'
+import { getRedisInstance } from '@/helpers/redis-creator'
 
 const gzip = promisify(zlib.gzip)
 const gunzip = promisify(zlib.gunzip)
@@ -45,13 +46,7 @@ export class ParsersService {
     parsersProcess: ChildProcess | null = null
 
     private constructor() {
-        const env: StringKV = process.env as any
-        const redisUri = env.REDIS_URL
-        if (redisUri) {
-            this.sub = new IORedis(redisUri)
-        } else {
-            this.sub = new IORedis()
-        }
+        this.sub = getRedisInstance();
         this.sub.subscribe(ParsersService.REDIS_CHANNEL)
             .then(() => {
                 this.sub.on('message', (chan, msg) => {

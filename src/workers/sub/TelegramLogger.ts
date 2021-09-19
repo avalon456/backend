@@ -2,9 +2,11 @@ import { Worker } from 'bullmq'
 import { sendTelegramMessageToMainChannel } from '@/external/telegram'
 import { templateFile } from '@/helpers/templating'
 import { UserService } from '@/services/UserService'
+import { getRedisConnection, getRedisInstance } from '@/helpers/redis-creator'
 
 const userService = new UserService()
 
+const redis = getRedisConnection()
 const worker = new Worker('TLogger', async ({ name, data }) => {
     if (name === 'delete') {
         const { reason, issuerId, translation } = data
@@ -62,5 +64,5 @@ const worker = new Worker('TLogger', async ({ name, data }) => {
             console.error(e)
         }
     }
-})
+}, redis)
 worker.on('error', console.error)
