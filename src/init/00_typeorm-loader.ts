@@ -18,11 +18,12 @@ export const connectionOptions: ConnectionOptions = {
     logging: isProduction ? ['migration', 'warn', 'error'] : true,
     namingStrategy: new TheNamingStrategy(),
     ssl: {
-        rejectUnauthorized: false
+        rejectUnauthorized: true
+        
     },
     extra: {
         ssl: true,
-        rejectUnauthorized: false
+        rejectUnauthorized: true
     }
     // ssl: {
     //     ca: readFileSync('./dist/src/ca_cert.cer').toString()
