@@ -17,9 +17,13 @@ export const connectionOptions: ConnectionOptions = {
     ],
     logging: isProduction ? ['migration', 'warn', 'error'] : true,
     namingStrategy: new TheNamingStrategy(),
-    ssl: {
-        ca: readFileSync('./dist/src/ca_cert.cer').toString()
+    ssl: true,
+    extra: {
+        ssl: true
     }
+    // ssl: {
+    //     ca: readFileSync('./dist/src/ca_cert.cer').toString()
+    // }
 }
 
 export default async function typeOrmLoader (connOptions: Partial<ConnectionOptions> = {}): Promise<void> {
