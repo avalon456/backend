@@ -16,7 +16,10 @@ export const connectionOptions: ConnectionOptions = {
         join(__dirname, '../migrations/*.{ts,js}')
     ],
     logging: isProduction ? ['migration', 'warn', 'error'] : true,
-    namingStrategy: new TheNamingStrategy()
+    namingStrategy: new TheNamingStrategy(),
+    ssl: {
+        ca: readFileSync('./dist/src/ca_cert.cer').toString()
+    }
 }
 
 export default async function typeOrmLoader (connOptions: Partial<ConnectionOptions> = {}): Promise<void> {
