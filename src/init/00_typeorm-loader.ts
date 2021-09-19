@@ -9,10 +9,6 @@ import { readFileSync } from 'fs'
 export const connectionOptions: ConnectionOptions = {
     type: databaseType as any,
     url: database,
-    ssl: {
-        ca: readFileSync("./src/certs/server.crt.pem")
-           .toString()
-    },
     entities: [
         join(__dirname, '../models/**/*.{ts,js}')
     ],
