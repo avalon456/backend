@@ -7,6 +7,7 @@ export class VkApiError extends Error {
 }
 
 export function vkApi<T = any> (method: string, params: AnyKV): Promise<T> {
+    console.log(vk)
     return fetchRetry(`https://api.vk.com/method/${method}`, {
         method: 'POST',
         headers: {
